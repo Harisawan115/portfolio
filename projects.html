@@ -996,8 +996,14 @@ The goal of this project is to build a machine learning regression model that ca
                 }
             });
         });
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = e => {
+  if(e.ctrlKey && ['c','u','s','v'].includes(e.key.toLowerCase())) e.preventDefault();
+};
     </script>
 </body>
 </html>
+
 
 
