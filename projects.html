@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Haris Awan - AI Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        display: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#ec4899',
+                        dark: '#0a0a0f',
+                        darker: '#050508',
+                        surface: '#13131f',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #050508;
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: gradient 3s linear infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Glass Card */
+        .glass-card {
+            background: rgba(19, 19, 31, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        /* Project Card */
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        .project-card.hidden {
+            display: none;
+        }
+        
+        .project-image {
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-image {
+            transform: scale(1.1);
+        }
+        
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(5, 5, 8, 0.95), rgba(5, 5, 8, 0.7), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+        
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+        
+        /* Filter Buttons */
+        .filter-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .filter-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: transparent;
+        }
+        
+        /* Category Badge */
+        .category-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Tech Stack Tags */
+        .tech-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        
+        .tech-tag:hover {
+            background: rgba(99, 102, 241, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Magnetic Button */
+        .magnetic-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .magnetic-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            z-index: 10000;
+            transition: width 0.1s;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050508;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            border-top-color: #6366f1;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Counter */
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="text-center">
+            <div class="loader mb-4 mx-auto"></div>
+            <p class="text-gray-400 text-sm tracking-widest">LOADING PROJECTS</p>
+        </div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300 bg-darker/80 backdrop-blur-md border-b border-white/5" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex-shrink-0">
+                    <span class="font-display text-3xl font-bold gradient-text tracking-tighter">MHA.</span>
+                </a>
+                
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-sm font-medium text-gray-300 hover:text-white transition-colors py-2">Home</a>
+                    <a href="index.html#about" class="text-sm font-medium text-gray-300 hover:text-white transition-colors py-2">About</a>
+                    <a href="index.html#skills" class="text-sm font-medium text-gray-300 hover:text-white transition-colors py-2">Skills</a>
+                    <a href="#" class="text-sm font-medium text-white border-b-2 border-primary py-2">Projects</a>
+                    <a href="index.html#contact" class="magnetic-btn text-sm">Contact Me</a>
+                </div>
+
+                <button class="md:hidden text-white p-2" onclick="toggleMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-card mx-4 rounded-2xl p-6 mt-2 border border-white/10">
+            <div class="flex flex-col space-y-4">
+                <a href="index.html" class="text-gray-300 hover:text-primary transition-colors">Home</a>
+                <a href="index.html#about" class="text-gray-300 hover:text-primary transition-colors">About</a>
+                <a href="index.html#skills" class="text-gray-300 hover:text-primary transition-colors">Skills</a>
+                <a href="#" class="text-primary font-medium">Projects</a>
+                <a href="index.html#contact" class="text-gray-300 hover:text-primary transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full filter blur-[128px]"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full filter blur-[128px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center reveal active">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+                    <i class="fas fa-folder-open text-primary mr-2"></i>
+                    <span class="text-sm text-gray-300">Portfolio Showcase</span>
+                </div>
+                
+                <h1 class="font-display text-5xl md:text-7xl font-bold mb-6">
+                    My <span class="gradient-text">Projects</span>
+                </h1>
+                
+                <p class="text-gray-400 text-xl max-w-2xl mx-auto mb-8">
+                    Explore my collection of <span class="counter text-white font-bold text-2xl" data-target="17">17</span> projects spanning AI/ML, Python applications, and Web Development
+                </p>
+
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap justify-center gap-3 mb-12">
+                    <button class="filter-btn active px-6 py-3 rounded-full text-sm font-medium transition-all text-white" onclick="filterProjects('all', this)">
+                        All Projects
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-full text-sm font-medium transition-all text-white" onclick="filterProjects('ai-ml', this)">
+                        <i class="fas fa-brain mr-2"></i>AI/ML
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-full text-sm font-medium transition-all text-white" onclick="filterProjects('python', this)">
+                        <i class="fab fa-python mr-2"></i>Python
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-full text-sm font-medium transition-all text-white" onclick="filterProjects('web', this)">
+                        <i class="fas fa-globe mr-2"></i>Website
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="pb-32 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- AI/ML Project 1 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center">
+                            <i class="fas fa-network-wired text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-xs text-blue-300 font-medium">
+                            Deep Learning
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Neural Network Image Classifier</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">CNN-based image classification system achieving 98% accuracy on CIFAR-10 dataset with data augmentation and transfer learning.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-brain text-orange-400"></i> TensorFlow</span>
+                            <span class="tech-tag"><i class="fas fa-eye text-blue-400"></i> OpenCV</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 2 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-green-600 via-teal-600 to-blue-600 flex items-center justify-center">
+                            <i class="fas fa-comments text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-xs text-green-300 font-medium">
+                            NLP
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Sentiment Analysis Engine</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">BERT-based sentiment analysis for social media monitoring with real-time processing and multilingual support.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-language text-purple-400"></i> BERT</span>
+                            <span class="tech-tag"><i class="fas fa-database text-green-400"></i> MongoDB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 3 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 flex items-center justify-center">
+                            <i class="fas fa-object-group text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-300 font-medium">
+                            Computer Vision
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Real-time Object Detection</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">YOLOv8 implementation for real-time object detection in video streams with 30+ FPS performance optimization.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-bolt text-yellow-300"></i> YOLOv8</span>
+                            <span class="tech-tag"><i class="fas fa-video text-red-400"></i> OpenCV</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 4 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 flex items-center justify-center">
+                            <i class="fas fa-magic text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-orange-500/20 border border-orange-500/30 rounded-full text-xs text-orange-300 font-medium">
+                            Recommendation
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Movie Recommendation System</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Collaborative filtering and content-based hybrid recommendation engine with matrix factorization techniques.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-calculator text-blue-400"></i> NumPy</span>
+                            <span class="tech-tag"><i class="fas fa-table text-green-400"></i> Pandas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 5 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 flex items-center justify-center">
+                            <i class="fas fa-chart-line text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded-full text-xs text-cyan-300 font-medium">
+                            Time Series
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Stock Price Predictor</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">LSTM-based time series forecasting for stock prices with technical indicator integration and backtesting.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-memory text-purple-400"></i> LSTM</span>
+                            <span class="tech-tag"><i class="fas fa-chart-bar text-green-400"></i> Matplotlib</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 6 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-pink-600 via-purple-600 to-indigo-600 flex items-center justify-center">
+                            <i class="fas fa-images text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-pink-500/20 border border-pink-500/30 rounded-full text-xs text-pink-300 font-medium">
+                            GANs
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Face Generation GAN</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">DCGAN implementation for generating realistic human faces with progressive growing techniques.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-brain text-red-400"></i> PyTorch</span>
+                            <span class="tech-tag"><i class="fas fa-image text-blue-400"></i> PIL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 7 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center">
+                            <i class="fas fa-robot text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-indigo-500/20 border border-indigo-500/30 rounded-full text-xs text-indigo-300 font-medium">
+                            LLM / RAG
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">RAG-based QA Chatbot</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Retrieval-Augmented Generation chatbot using LangChain and vector databases for accurate document Q&A.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-link text-green-400"></i> LangChain</span>
+                            <span class="tech-tag"><i class="fas fa-database text-blue-400"></i> Pinecone</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 8 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-red-600 via-orange-600 to-yellow-600 flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-red-500/20 border border-red-500/30 rounded-full text-xs text-red-300 font-medium">
+                            Anomaly Detection
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Fraud Detection System</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Isolation Forest and Autoencoder-based anomaly detection for credit card fraud with real-time alerts.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-tree text-green-400"></i> Scikit-learn</span>
+                            <span class="tech-tag"><i class="fas fa-bell text-red-400"></i> Alerts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 9 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 flex items-center justify-center">
+                            <i class="fas fa-microphone text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-teal-500/20 border border-teal-500/30 rounded-full text-xs text-teal-300 font-medium">
+                            Speech AI
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Speech-to-Text Transcription</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Whisper AI implementation for accurate multilingual speech recognition with speaker diarization.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-wave-square text-purple-400"></i> Whisper</span>
+                            <span class="tech-tag"><i class="fas fa-audio-description text-blue-400"></i> Librosa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 10 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 flex items-center justify-center">
+                            <i class="fas fa-walking text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-violet-500/20 border border-violet-500/30 rounded-full text-xs text-violet-300 font-medium">
+                            Pose Estimation
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Human Pose Estimation</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">MediaPipe-based pose detection for fitness tracking applications with angle calculation and rep counting.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-running text-green-400"></i> MediaPipe</span>
+                            <span class="tech-tag"><i class="fas fa-calculator text-orange-400"></i> NumPy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 11 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 flex items-center justify-center">
+                            <i class="fas fa-file-alt text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-xs text-emerald-300 font-medium">
+                            NLP
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Abstractive Text Summarizer</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">T5 Transformer model for generating concise summaries of long articles with ROUGE score optimization.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-robot text-blue-400"></i> T5</span>
+                            <span class="tech-tag"><i class="fas fa-language text-purple-400"></i> Transformers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 12 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-slate-600 via-gray-600 to-zinc-600 flex items-center justify-center">
+                            <i class="fas fa-car text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-slate-500/20 border border-slate-500/30 rounded-full text-xs text-slate-300 font-medium">
+                            Autonomous
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Lane Detection System</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Computer vision pipeline for autonomous vehicle lane detection using Hough transforms and deep learning.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-road text-gray-400"></i> OpenCV</span>
+                            <span class="tech-tag"><i class="fas fa-brain text-red-400"></i> Keras</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 13 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-rose-600 via-pink-600 to-red-600 flex items-center justify-center">
+                            <i class="fas fa-heartbeat text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-rose-500/20 border border-rose-500/30 rounded-full text-xs text-rose-300 font-medium">
+                            Healthcare AI
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Diabetic Retinopathy Detection</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">CNN model for early detection of diabetic retinopathy from retinal images with 94% sensitivity.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-eye text-blue-400"></i> TensorFlow</span>
+                            <span class="tech-tag"><i class="fas fa-hospital text-red-400"></i> Medical AI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 14 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-amber-600 via-orange-600 to-red-600 flex items-center justify-center">
+                            <i class="fas fa-gamepad text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-amber-500/20 border border-amber-500/30 rounded-full text-xs text-amber-300 font-medium">
+                            Reinforcement Learning
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Game Playing Agent</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Deep Q-Network (DQN) agent trained to play Atari games, achieving superhuman performance on Breakout.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-brain text-purple-400"></i> PyTorch</span>
+                            <span class="tech-tag"><i class="fas fa-robot text-green-400"></i> OpenAI Gym</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML Project 15 -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="ai-ml">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-fuchsia-600 via-pink-600 to-rose-600 flex items-center justify-center">
+                            <i class="fas fa-palette text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-fuchsia-500/20 border border-fuchsia-500/30 rounded-full text-xs text-fuchsia-300 font-medium">
+                            Neural Style Transfer
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Neural Style Transfer App</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">VGG19-based style transfer application with real-time processing and multiple artistic style options.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-layer-group text-orange-400"></i> VGG19</span>
+                            <span class="tech-tag"><i class="fas fa-mobile-alt text-blue-400"></i> Streamlit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Python Project -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="python">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-yellow-600 via-orange-600 to-red-600 flex items-center justify-center">
+                            <i class="fab fa-python text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded-full text-xs text-yellow-300 font-medium">
+                            Desktop App
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Tahir Ice Factory ERP</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Complete desktop-based accounting and inventory management system with double-entry ledger, automated billing, and financial reporting using Tkinter and SQLite.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-python text-yellow-400"></i> Python</span>
+                            <span class="tech-tag"><i class="fas fa-desktop text-blue-400"></i> Tkinter</span>
+                            <span class="tech-tag"><i class="fas fa-database text-green-400"></i> SQLite</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Website Project -->
+                <div class="project-card glass-card rounded-3xl overflow-hidden" data-category="web">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="project-image w-full h-full bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 flex items-center justify-center">
+                            <i class="fas fa-globe text-6xl text-white/30"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded-full text-xs text-cyan-300 font-medium">
+                            Web Development
+                        </span>
+                        <div class="project-overlay">
+                            <a href="#" class="magnetic-btn w-full justify-center">
+                                View Project <i class="fas fa-external-link-alt ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-white">Nextech Educational Portal</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">Responsive educational platform with dynamic content management, student enrollment system, course catalogs, and integrated payment processing for 500+ students.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-tag"><i class="fab fa-html5 text-orange-400"></i> HTML5</span>
+                            <span class="tech-tag"><i class="fab fa-css3-alt text-blue-400"></i> CSS3</span>
+                            <span class="tech-tag"><i class="fab fa-js text-yellow-400"></i> JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">Want to see more?</h2>
+            <p class="text-gray-300 text-lg mb-8">Check out my GitHub for additional projects and contributions</p>
+            <a href="https://github.com/MFK867" target="_blank" class="magnetic-btn inline-flex text-lg">
+                <i class="fab fa-github mr-2"></i> Visit GitHub Profile
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/5 bg-darker">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <a href="index.html" class="font-display text-2xl font-bold gradient-text">MHA.</a>
+            <p class="text-gray-500 text-sm">© 2026 Haris Awan. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="index.html" class="text-gray-500 hover:text-white transition-colors text-sm">Home</a>
+                <a href="#" class="text-gray-500 hover:text-white transition-colors text-sm">Projects</a>
+                <a href="index.html#contact" class="text-gray-500 hover:text-white transition-colors text-sm">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hide loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                animateCounters();
+            }, 800);
+        });
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scroll-progress');
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+        });
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Filter Projects
+        function filterProjects(category, btn) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Filter items
+            const items = document.querySelectorAll('.project-card');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.classList.remove('hidden');
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
