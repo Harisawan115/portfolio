@@ -806,8 +806,14 @@ I turn data into intelligent solutions — operating from
                 btn.style.transform = 'translate(0, 0)';
             });
         });
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = e => {
+  if(e.ctrlKey && ['c','u','s','v'].includes(e.key.toLowerCase())) e.preventDefault();
+};
     </script>
 </body>
 </html>
+
 
 
